@@ -27,13 +27,14 @@
     background: linear-gradient(160deg, var(--deep) 0%, var(--mid) 55%, var(--bright) 100%);
     background-attachment: fixed;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
-    padding: 6vh 6vw;
+    padding: 6vh 6vw 8vh;
   }
 
   main {
     max-width: 640px;
+    width: 100%;
   }
 
   .eyebrow {
@@ -57,7 +58,79 @@
     line-height: 1.65;
     max-width: 46ch;
     color: rgba(238, 246, 244, 0.92);
-    margin: 0 0 2.2rem 0;
+    margin: 0 0 2.4rem 0;
+  }
+
+  .panel {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(238, 246, 244, 0.18);
+    border-radius: 10px;
+    padding: 1.6rem 1.75rem 1.8rem;
+    margin: 0 0 2.4rem 0;
+  }
+
+  .panel h2 {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.85rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: rgba(238, 246, 244, 0.75);
+    margin: 0 0 1.3rem 0;
+  }
+
+  .field {
+    margin-bottom: 1.1rem;
+  }
+
+  .field label {
+    display: block;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.92rem;
+    color: rgba(238, 246, 244, 0.88);
+    margin-bottom: 0.4rem;
+  }
+
+  .field .hint {
+    font-weight: 400;
+    color: rgba(238, 246, 244, 0.5);
+    font-size: 0.82rem;
+  }
+
+  .field input[type="number"] {
+    width: 100%;
+    padding: 0.6rem 0.75rem;
+    border-radius: 6px;
+    border: 1px solid rgba(238, 246, 244, 0.22);
+    background: rgba(11, 46, 51, 0.4);
+    color: var(--paper);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 1rem;
+  }
+
+  .field input[type="number"]:focus {
+    outline: none;
+    border-color: var(--bright);
+    box-shadow: 0 0 0 3px rgba(47, 158, 143, 0.28);
+  }
+
+  .generer-btn {
+    display: inline-block;
+    margin-top: 0.4rem;
+    padding: 0.7rem 1.5rem;
+    border: none;
+    border-radius: 6px;
+    background: var(--bright);
+    color: var(--deep);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.98rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: filter 0.15s ease;
+  }
+
+  .generer-btn:hover {
+    filter: brightness(1.1);
   }
 
   footer {
@@ -69,7 +142,7 @@
   }
 
   @media (max-width: 480px) {
-    body { padding: 8vh 7vw; }
+    body { padding: 8vh 7vw 8vh; }
   }
 </style>
 </head>
@@ -84,6 +157,33 @@
       relier intuitivement la théorie de la pyrolyse aux courbes qu'elle
       produit, sans matériel de laboratoire.
     </p>
+
+    <form class="panel" id="parametres-form">
+      <h2>Paramètres de la roche mère</h2>
+
+      <div class="field">
+        <label for="toc">Carbone organique total <span class="hint">TOC, en %</span></label>
+        <input type="number" id="toc" name="toc" min="0.1" max="30" step="0.1" value="5" required>
+      </div>
+
+      <div class="field">
+        <label for="hi">Indice d'hydrogène <span class="hint">HI, en mg HC/g TOC</span></label>
+        <input type="number" id="hi" name="hi" min="0" max="900" step="1" value="400" required>
+      </div>
+
+      <div class="field">
+        <label for="io">Indice d'oxygène <span class="hint">IO, en mg CO2/g TOC</span></label>
+        <input type="number" id="io" name="io" min="0" max="150" step="1" value="50" required>
+      </div>
+
+      <div class="field">
+        <label for="tmax">Tmax cible <span class="hint">en °C</span></label>
+        <input type="number" id="tmax" name="tmax" min="380" max="550" step="1" value="435" required>
+      </div>
+
+      <button type="button" class="generer-btn" id="generer-btn">Générer les courbes</button>
+    </form>
+
     <footer>
       Projet étudiant — EHES, Génie Pétrolier et Gaz, Groupe 01, Dakar
     </footer>
