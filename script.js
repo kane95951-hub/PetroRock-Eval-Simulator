@@ -63,3 +63,31 @@ function genererS2(temperatures, valeurS2, tmax) {
     return { temperature: temperature, valeur: valeur };
   });
 }
+
+/**
+ * Génère les points de la courbe S3 (CO2 libéré par les groupes
+ * fonctionnels oxygénés du kérogène pendant la pyrolyse).
+ *
+ * Le pic S3 est plus large que S2 : contrairement au craquage des
+ * hydrocarbures (qui dépend fortement de la maturité, donc de tmax),
+ * la décomposition des groupes oxygénés se produit sur une plage de
+ * température plus étendue et à peu près indépendante de tmax — le
+ * pic reste donc centré sur une position fixe.
+ *
+ * @param {number[]} temperatures - Températures (°C), typiquement entre 300 et 650°C
+ * @param {number} valeurIO - Indice d'oxygène (mg CO2/g TOC) : pilote la hauteur du pic
+ * @returns {{temperature: number, valeur: number}[]} Tableau de points
+ */
+function genererS3(temperatures, valeurIO) {
+  const centre = 400;  // °C — position du pic S3, indépendante de tmax
+  const largeur = 90;  // °C — écart-type large : pic plus étalé que S2
+
+  const hauteur = valeurIO / (largeur * Math.sqrt(2 * Math.PI));
+
+  return temperatures.map(function (temperature) {
+    const exposant = -0.5 * Math.pow((temperature - centre) / largeur, 2);
+    const valeur = hauteur * Math.exp(exposant);
+
+    return { temperature: temperature, valeur: valeur };
+  });
+}
