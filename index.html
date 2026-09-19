@@ -133,6 +133,11 @@
     filter: brightness(1.1);
   }
 
+  .graphique-panel canvas {
+    width: 100% !important;
+    max-width: 100%;
+  }
+
   footer {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     font-size: 0.85rem;
@@ -184,11 +189,48 @@
       <button type="button" class="generer-btn" id="generer-btn">Générer les courbes</button>
     </form>
 
+    <div class="panel graphique-panel">
+      <h2>Graphique (données de test)</h2>
+      <canvas id="graphique-rockeval" height="260"></canvas>
+    </div>
+
     <footer>
       Projet étudiant — EHES, Génie Pétrolier et Gaz, Groupe 01, Dakar
     </footer>
   </main>
 
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
   <script src="script.js"></script>
+  <script>
+    // Test d'intégration de Chart.js (Jour 11) : données factices, juste
+    // pour vérifier que la librairie est bien chargée et qu'un graphique
+    // s'affiche. Ces données seront remplacées par les vraies courbes
+    // S1/S2/S3 au Jour 12, quand le bouton "Générer les courbes" sera relié.
+    const temperaturesTest = [300, 350, 400, 450, 500, 550, 600, 650];
+    const valeursTest = [2, 8, 20, 35, 25, 12, 5, 2];
+
+    const ctx = document.getElementById('graphique-rockeval');
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: temperaturesTest,
+        datasets: [{
+          label: 'Courbe de test',
+          data: valeursTest,
+          borderColor: '#2f9e8f',
+          backgroundColor: 'rgba(47, 158, 143, 0.15)',
+          tension: 0.3,
+          fill: true
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          x: { title: { display: true, text: 'Température (°C)' } },
+          y: { title: { display: true, text: 'Valeur (test)' } }
+        }
+      }
+    });
+  </script>
 </body>
 </html>
