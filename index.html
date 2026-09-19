@@ -190,7 +190,7 @@
     </form>
 
     <div class="panel graphique-panel">
-      <h2>Graphique (données de test)</h2>
+      <h2>Courbes S1 / S2 / S3</h2>
       <canvas id="graphique-rockeval" height="260"></canvas>
     </div>
 
@@ -202,35 +202,81 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
   <script src="script.js"></script>
   <script>
-    // Test d'intégration de Chart.js (Jour 11) : données factices, juste
-    // pour vérifier que la librairie est bien chargée et qu'un graphique
-    // s'affiche. Ces données seront remplacées par les vraies courbes
-    // S1/S2/S3 au Jour 12, quand le bouton "Générer les courbes" sera relié.
-    const temperaturesTest = [300, 350, 400, 450, 500, 550, 600, 650];
-    const valeursTest = [2, 8, 20, 35, 25, 12, 5, 2];
+    // Références aux champs du formulaire et au bouton
+    const champTOC = document.getElementById('toc');
+    const champHI = document.getElementById('hi');
+    const champIO = document.getElementById('io');
+    const champTmax = document.getElementById('tmax');
+    const boutonGenerer = document.getElementById('generer-btn');
 
+    // Construit la liste des températures utilisée pour tracer les courbes
+    function creerTemperatures(min, max, pas) {
+      const temperatures = [];
+      for (let t = min; t <= max; t += pas) {
+        temperatures.push(t);
+      }
+      return temperatures;
+    }
+    const temperatures = creerTemperatures(300, 650, 2);
+
+    // Déduit S1, S2, S3 à partir des paramètres saisis (TOC, HI, IO).
+    // S2 et S3 se calculent directement depuis TOC/HI/IO ; S1 n'a pas de
+    // champ dédié dans le formulaire, on l'estime donc comme une petite
+    // fraction de S2 (simplification pédagogique assumée du modèle).
+    function calculerParametres() {
+      const toc = parseFloat(champTOC.value);
+      const hi = parseFloat(champHI.value);
+      const io = parseFloat(champIO.value);
+      const tmax = parseFloat(champTmax.value);
+
+      const s2 = hi * toc / 100;
+      const s3 = io * toc / 100;
+      const s1 = 0.075 * s2;
+
+      return { s1: s1, s2: s2, s3: s3, tmax: tmax };
+    }
+
+    // Création du graphique, avec trois courbes vides pour l'instant
     const ctx = document.getElementById('graphique-rockeval');
-    new Chart(ctx, {
+    const graphique = new Chart(ctx, {
       type: 'line',
       data: {
-        labels: temperaturesTest,
-        datasets: [{
-          label: 'Courbe de test',
-          data: valeursTest,
-          borderColor: '#2f9e8f',
-          backgroundColor: 'rgba(47, 158, 143, 0.15)',
-          tension: 0.3,
-          fill: true
-        }]
+        labels: temperatures,
+        datasets: [
+          { label: 'S1', data: [], borderColor: '#4f8cff', backgroundColor: 'rgba(79, 140, 255, 0.12)', pointRadius: 0, tension: 0.3 },
+          { label: 'S2', data: [], borderColor: '#2f9e8f', backgroundColor: 'rgba(47, 158, 143, 0.12)', pointRadius: 0, tension: 0.3 },
+          { label: 'S3', data: [], borderColor: '#e08a3c', backgroundColor: 'rgba(224, 138, 60, 0.12)', pointRadius: 0, tension: 0.3 }
+        ]
       },
       options: {
         responsive: true,
         scales: {
           x: { title: { display: true, text: 'Température (°C)' } },
-          y: { title: { display: true, text: 'Valeur (test)' } }
+          y: { title: { display: true, text: 'Valeur (mg/g roche)' } }
         }
       }
     });
+
+    // Recalcule les trois courbes à partir du formulaire et met à jour le graphique
+    function genererEtAfficher() {
+      const parametres = calculerParametres();
+
+      const pointsS1 = genererS1(temperatures, parametres.s1);
+      const pointsS2 = genererS2(temperatures, parametres.s2, parametres.tmax);
+      const pointsS3 = genererS3(temperatures, parametres.s3);
+
+      graphique.data.datasets[0].data = pointsS1.map(function (p) { return p.valeur; });
+      graphique.data.datasets[1].data = pointsS2.map(function (p) { return p.valeur; });
+      graphique.data.datasets[2].data = pointsS3.map(function (p) { return p.valeur; });
+
+      graphique.update();
+    }
+
+    // Premier tracé au chargement de la page, avec les valeurs par défaut
+    genererEtAfficher();
+
+    // Recalcule et retrace à chaque clic sur "Générer les courbes"
+    boutonGenerer.addEventListener('click', genererEtAfficher);
   </script>
 </body>
 </html>
