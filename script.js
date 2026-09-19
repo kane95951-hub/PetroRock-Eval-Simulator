@@ -1,4 +1,23 @@
 /**
+ * Calcule la valeur d'une gaussienne à une température donnée.
+ *
+ * Fonction utilitaire commune à genererS1, genererS2 et genererS3 :
+ * les trois courbes suivent la même forme mathématique de base — seuls
+ * leur position (centre), leur largeur et leur hauteur diffèrent. La
+ * regrouper ici évite de répéter trois fois la même formule.
+ *
+ * @param {number} temperature - Température (°C) où évaluer la courbe
+ * @param {number} centre - Position du sommet du pic (°C)
+ * @param {number} largeur - Écart-type : plus il est petit, plus le pic est étroit
+ * @param {number} hauteur - Amplitude maximale du pic
+ * @returns {number} Valeur de la gaussienne à cette température
+ */
+function gaussienne(temperature, centre, largeur, hauteur) {
+  const exposant = -0.5 * Math.pow((temperature - centre) / largeur, 2);
+  return hauteur * Math.exp(exposant);
+}
+
+/**
  * Génère les points de la courbe S1 (hydrocarbures libres).
  *
  * Le pic S1 correspond aux hydrocarbures déjà présents dans la roche
@@ -11,21 +30,18 @@
  * @returns {{temperature: number, valeur: number}[]} Tableau de points
  */
 function genererS1(temperatures, valeurS1) {
-  const centre = 300;   // °C — position du sommet du pic S1
-  const largeur = 15;   // °C — écart-type : pic étroit et pointu
+  const centre = 300;  // °C — position du sommet du pic S1
+  const largeur = 15;  // °C — écart-type : pic étroit et pointu
+
+  // Ce facteur assure que l'aire totale sous la courbe reste
+  // proportionnelle à valeurS1, quelle que soit la largeur choisie.
+  const hauteur = valeurS1 / (largeur * Math.sqrt(2 * Math.PI));
 
   return temperatures.map(function (temperature) {
-    // Formule d'une gaussienne : la valeur diminue d'autant plus vite
-    // que la température s'éloigne du centre (300°C).
-    const exposant = -0.5 * Math.pow((temperature - centre) / largeur, 2);
-
-    // Ce facteur assure que l'aire totale sous la courbe reste
-    // proportionnelle à valeurS1, quelle que soit la largeur choisie.
-    const hauteur = valeurS1 / (largeur * Math.sqrt(2 * Math.PI));
-
-    const valeur = hauteur * Math.exp(exposant);
-
-    return { temperature: temperature, valeur: valeur };
+    return {
+      temperature: temperature,
+      valeur: gaussienne(temperature, centre, largeur, hauteur)
+    };
   });
 }
 
@@ -57,10 +73,11 @@ function genererS2(temperatures, valeurS2, tmax) {
     // Avant le sommet : montée lente (largeur plus grande).
     // Après le sommet : descente rapide (largeur plus petite).
     const largeur = temperature <= tmax ? largeurMontee : largeurDescente;
-    const exposant = -0.5 * Math.pow((temperature - tmax) / largeur, 2);
-    const valeur = hauteur * Math.exp(exposant);
 
-    return { temperature: temperature, valeur: valeur };
+    return {
+      temperature: temperature,
+      valeur: gaussienne(temperature, tmax, largeur, hauteur)
+    };
   });
 }
 
@@ -85,9 +102,9 @@ function genererS3(temperatures, valeurIO) {
   const hauteur = valeurIO / (largeur * Math.sqrt(2 * Math.PI));
 
   return temperatures.map(function (temperature) {
-    const exposant = -0.5 * Math.pow((temperature - centre) / largeur, 2);
-    const valeur = hauteur * Math.exp(exposant);
-
-    return { temperature: temperature, valeur: valeur };
+    return {
+      temperature: temperature,
+      valeur: gaussienne(temperature, centre, largeur, hauteur)
+    };
   });
 }
