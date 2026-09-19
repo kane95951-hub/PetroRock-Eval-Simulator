@@ -236,6 +236,14 @@
       return { s1: s1, s2: s2, s3: s3, tmax: tmax };
     }
 
+    // Couleurs de texte/grille par défaut pour Chart.js : le fond de la
+    // page étant sombre, on éclaircit tout ce qui est écrit ou tracé en
+    // fin (légende, titres d'axes, graduations, lignes de grille), sinon
+    // Chart.js utilise par défaut du texte foncé, peu lisible ici.
+    Chart.defaults.color = 'rgba(238, 246, 244, 0.85)';
+    Chart.defaults.borderColor = 'rgba(238, 246, 244, 0.12)';
+    Chart.defaults.font.family = "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
+
     // Création du graphique, avec trois courbes vides pour l'instant
     const ctx = document.getElementById('graphique-rockeval');
     const graphique = new Chart(ctx, {
@@ -243,13 +251,16 @@
       data: {
         labels: temperatures,
         datasets: [
-          { label: 'S1', data: [], borderColor: '#4f8cff', backgroundColor: 'rgba(79, 140, 255, 0.12)', pointRadius: 0, tension: 0.3 },
-          { label: 'S2', data: [], borderColor: '#2f9e8f', backgroundColor: 'rgba(47, 158, 143, 0.12)', pointRadius: 0, tension: 0.3 },
-          { label: 'S3', data: [], borderColor: '#e08a3c', backgroundColor: 'rgba(224, 138, 60, 0.12)', pointRadius: 0, tension: 0.3 }
+          { label: 'S1 — HC libres', data: [], borderColor: '#4f8cff', backgroundColor: 'rgba(79, 140, 255, 0.12)', pointRadius: 0, tension: 0.3 },
+          { label: 'S2 — potentiel pétrolier', data: [], borderColor: '#2f9e8f', backgroundColor: 'rgba(47, 158, 143, 0.12)', pointRadius: 0, tension: 0.3 },
+          { label: 'S3 — CO2 libéré', data: [], borderColor: '#e08a3c', backgroundColor: 'rgba(224, 138, 60, 0.12)', pointRadius: 0, tension: 0.3 }
         ]
       },
       options: {
         responsive: true,
+        plugins: {
+          legend: { position: 'top', labels: { usePointStyle: true, boxWidth: 8 } }
+        },
         scales: {
           x: { title: { display: true, text: 'Température (°C)' } },
           y: { title: { display: true, text: 'Valeur (mg/g roche)' } }
