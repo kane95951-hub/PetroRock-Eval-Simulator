@@ -244,12 +244,46 @@
     Chart.defaults.borderColor = 'rgba(238, 246, 244, 0.12)';
     Chart.defaults.font.family = "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
 
-    // Création du graphique, avec trois courbes vides pour l'instant
+    // Mémorise le tmax actuellement affiché, pour que le plugin
+    // ci-dessous sache où tracer sa ligne verticale.
+    let tmaxActuel = parseFloat(champTmax.value);
+
+    // Petit plugin Chart.js "maison" (pas de librairie externe) qui
+    // dessine une ligne verticale pointillée à la position de tmax,
+    // avec une étiquette au-dessus indiquant sa valeur.
+    const ligneTmaxPlugin = {
+      id: 'ligneTmax',
+      afterDatasetsDraw(chart) {
+        const { ctx, chartArea, scales } = chart;
+        const xPixel = scales.x.getPixelForValue(tmaxActuel);
+        if (xPixel < chartArea.left || xPixel > chartArea.right) return;
+
+        ctx.save();
+        ctx.strokeStyle = 'rgba(238, 246, 244, 0.55)';
+        ctx.setLineDash([5, 4]);
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(xPixel, chartArea.top);
+        ctx.lineTo(xPixel, chartArea.bottom);
+        ctx.stroke();
+
+        ctx.setLineDash([]);
+        ctx.fillStyle = 'rgba(238, 246, 244, 0.9)';
+        ctx.font = "11px -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
+        ctx.textAlign = 'center';
+        ctx.fillText('Tmax = ' + tmaxActuel + '°C', xPixel, chartArea.top - 6);
+        ctx.restore();
+      }
+    };
+
+    // Création du graphique, avec trois courbes vides pour l'instant.
+    // Chaque point est de la forme {temperature, valeur} — on indique à
+    // Chart.js où lire x et y via "parsing", plutôt que de reformater
+    // les tableaux renvoyés par genererS1/S2/S3.
     const ctx = document.getElementById('graphique-rockeval');
     const graphique = new Chart(ctx, {
       type: 'line',
       data: {
-        labels: temperatures,
         datasets: [
           { label: 'S1 — HC libres', data: [], borderColor: '#4f8cff', backgroundColor: 'rgba(79, 140, 255, 0.12)', pointRadius: 0, tension: 0.3 },
           { label: 'S2 — potentiel pétrolier', data: [], borderColor: '#2f9e8f', backgroundColor: 'rgba(47, 158, 143, 0.12)', pointRadius: 0, tension: 0.3 },
@@ -258,27 +292,27 @@
       },
       options: {
         responsive: true,
+        parsing: { xAxisKey: 'temperature', yAxisKey: 'valeur' },
+        layout: { padding: { top: 20 } },
         plugins: {
           legend: { position: 'top', labels: { usePointStyle: true, boxWidth: 8 } }
         },
         scales: {
-          x: { title: { display: true, text: 'Température (°C)' } },
+          x: { type: 'linear', title: { display: true, text: 'Température (°C)' } },
           y: { title: { display: true, text: 'Valeur (mg/g roche)' } }
         }
-      }
+      },
+      plugins: [ligneTmaxPlugin]
     });
 
     // Recalcule les trois courbes à partir du formulaire et met à jour le graphique
     function genererEtAfficher() {
       const parametres = calculerParametres();
+      tmaxActuel = parametres.tmax;
 
-      const pointsS1 = genererS1(temperatures, parametres.s1);
-      const pointsS2 = genererS2(temperatures, parametres.s2, parametres.tmax);
-      const pointsS3 = genererS3(temperatures, parametres.s3);
-
-      graphique.data.datasets[0].data = pointsS1.map(function (p) { return p.valeur; });
-      graphique.data.datasets[1].data = pointsS2.map(function (p) { return p.valeur; });
-      graphique.data.datasets[2].data = pointsS3.map(function (p) { return p.valeur; });
+      graphique.data.datasets[0].data = genererS1(temperatures, parametres.s1);
+      graphique.data.datasets[1].data = genererS2(temperatures, parametres.s2, parametres.tmax);
+      graphique.data.datasets[2].data = genererS3(temperatures, parametres.s3);
 
       graphique.update();
     }
