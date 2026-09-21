@@ -136,6 +136,24 @@
     transition: filter 0.15s ease;
   }
 
+  .field.invalide input,
+  .field.invalide select {
+    border-color: #e2585c;
+  }
+
+  .erreurs {
+    display: none;
+    margin-top: 0.9rem;
+    padding: 0.65rem 0.85rem;
+    border-radius: 6px;
+    background: rgba(224, 88, 92, 0.12);
+    border: 1px solid rgba(224, 88, 92, 0.4);
+    color: rgba(255, 224, 224, 0.95);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.88rem;
+    line-height: 1.5;
+  }
+
   .generer-btn:hover {
     filter: brightness(1.1);
   }
@@ -209,6 +227,8 @@
       </div>
 
       <button type="button" class="generer-btn" id="generer-btn">Générer les courbes</button>
+
+      <div class="erreurs" id="zone-erreurs" role="alert"></div>
     </form>
 
     <div class="panel graphique-panel">
@@ -233,6 +253,47 @@
     const champTmax = document.getElementById('tmax');
     const champType = document.getElementById('type-kerogene');
     const boutonGenerer = document.getElementById('generer-btn');
+    const zoneErreurs = document.getElementById('zone-erreurs');
+
+    // Vérifie qu'un champ contient un nombre dans les bornes autorisées
+    // (min/max définis directement sur l'input HTML). Retourne un
+    // message d'erreur en français, ou null si tout est correct.
+    function validerChamp(champ, nomAffiche, unite) {
+      const valeur = parseFloat(champ.value);
+      const min = parseFloat(champ.min);
+      const max = parseFloat(champ.max);
+
+      if (isNaN(valeur)) {
+        return nomAffiche + ' doit être un nombre.';
+      }
+      if (valeur < min || valeur > max) {
+        return nomAffiche + ' doit être compris entre ' + min + ' et ' + max + ' ' + unite + '.';
+      }
+      return null;
+    }
+
+    // Valide les quatre champs, met en évidence ceux qui posent problème
+    // (bordure rouge) et affiche les messages en français. Renvoie true
+    // si le formulaire est entièrement valide.
+    function validerFormulaire() {
+      const messages = [];
+
+      [
+        { champ: champTOC, nom: 'Le TOC', unite: '%' },
+        { champ: champHI, nom: 'HI', unite: 'mg HC/g TOC' },
+        { champ: champIO, nom: 'IO', unite: 'mg CO2/g TOC' },
+        { champ: champTmax, nom: 'Tmax', unite: '°C' }
+      ].forEach(function (item) {
+        const message = validerChamp(item.champ, item.nom, item.unite);
+        item.champ.closest('.field').classList.toggle('invalide', Boolean(message));
+        if (message) messages.push(message);
+      });
+
+      zoneErreurs.textContent = messages.join(' ');
+      zoneErreurs.style.display = messages.length ? 'block' : 'none';
+
+      return messages.length === 0;
+    }
 
     // Valeurs HI/IO typiques par type de kérogène (voir section "À propos
     // du modèle") — utilisées pour préremplir le formulaire.
@@ -353,6 +414,8 @@
 
     // Recalcule les trois courbes à partir du formulaire et met à jour le graphique
     function genererEtAfficher() {
+      if (!validerFormulaire()) return; // on ne retrace pas si des valeurs sont invalides
+
       const parametres = calculerParametres();
       tmaxActuel = parametres.tmax;
 
