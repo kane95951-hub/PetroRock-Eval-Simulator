@@ -133,9 +133,14 @@
     filter: brightness(1.1);
   }
 
-  .graphique-panel canvas {
-    width: 100% !important;
-    max-width: 100%;
+  .graphique-conteneur {
+    position: relative;
+    width: 100%;
+    height: 280px;
+  }
+
+  @media (max-width: 480px) {
+    .graphique-conteneur { height: 220px; }
   }
 
   footer {
@@ -191,7 +196,9 @@
 
     <div class="panel graphique-panel">
       <h2>Courbes S1 / S2 / S3</h2>
-      <canvas id="graphique-rockeval" height="260"></canvas>
+      <div class="graphique-conteneur">
+        <canvas id="graphique-rockeval"></canvas>
+      </div>
     </div>
 
     <footer>
@@ -292,6 +299,7 @@
       },
       options: {
         responsive: true,
+        maintainAspectRatio: false,
         parsing: { xAxisKey: 'temperature', yAxisKey: 'valeur' },
         layout: { padding: { top: 20 } },
         plugins: {
