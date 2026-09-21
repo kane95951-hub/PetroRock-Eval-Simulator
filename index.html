@@ -97,7 +97,8 @@
     font-size: 0.82rem;
   }
 
-  .field input[type="number"] {
+  .field input[type="number"],
+  .field select {
     width: 100%;
     padding: 0.6rem 0.75rem;
     border-radius: 6px;
@@ -108,7 +109,13 @@
     font-size: 1rem;
   }
 
-  .field input[type="number"]:focus {
+  .field select option {
+    background: var(--deep);
+    color: var(--paper);
+  }
+
+  .field input[type="number"]:focus,
+  .field select:focus {
     outline: none;
     border-color: var(--bright);
     box-shadow: 0 0 0 3px rgba(47, 158, 143, 0.28);
@@ -172,6 +179,16 @@
       <h2>Paramètres de la roche mère</h2>
 
       <div class="field">
+        <label for="type-kerogene">Type de kérogène <span class="hint">optionnel — préremplit HI et IO</span></label>
+        <select id="type-kerogene">
+          <option value="">— Personnalisé —</option>
+          <option value="I">Kérogène I (lacustre, très huileux)</option>
+          <option value="II">Kérogène II (marin, huileux)</option>
+          <option value="III">Kérogène III (terrigène, gazeux)</option>
+        </select>
+      </div>
+
+      <div class="field">
         <label for="toc">Carbone organique total <span class="hint">TOC, en %</span></label>
         <input type="number" id="toc" name="toc" min="0.1" max="30" step="0.1" value="5" required>
       </div>
@@ -214,7 +231,28 @@
     const champHI = document.getElementById('hi');
     const champIO = document.getElementById('io');
     const champTmax = document.getElementById('tmax');
+    const champType = document.getElementById('type-kerogene');
     const boutonGenerer = document.getElementById('generer-btn');
+
+    // Valeurs HI/IO typiques par type de kérogène (voir section "À propos
+    // du modèle") — utilisées pour préremplir le formulaire.
+    const valeursParType = {
+      I: { hi: 750, io: 20 },
+      II: { hi: 450, io: 30 },
+      III: { hi: 120, io: 70 }
+    };
+
+    // Au choix d'un type dans le menu déroulant, préremplit HI et IO, puis
+    // retrace immédiatement les courbes avec ces nouvelles valeurs.
+    champType.addEventListener('change', function () {
+      const valeurs = valeursParType[champType.value];
+      if (!valeurs) return; // "Personnalisé" : on ne touche à rien
+
+      champHI.value = valeurs.hi;
+      champIO.value = valeurs.io;
+
+      genererEtAfficher();
+    });
 
     // Construit la liste des températures utilisée pour tracer les courbes
     function creerTemperatures(min, max, pas) {
