@@ -172,6 +172,27 @@
     filter: brightness(1.1);
   }
 
+  .secondaire-btn {
+    display: block;
+    width: 100%;
+    margin-top: 1rem;
+    padding: 0.65rem 1.5rem;
+    border: 1px solid rgba(47, 158, 143, 0.55);
+    border-radius: 6px;
+    background: transparent;
+    color: var(--paper);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-align: center;
+    cursor: pointer;
+    transition: background 0.15s ease;
+  }
+
+  .secondaire-btn:hover {
+    background: rgba(47, 158, 143, 0.12);
+  }
+
   .graphique-conteneur {
     position: relative;
     width: 100%;
@@ -254,6 +275,7 @@
       <div class="graphique-conteneur">
         <canvas id="graphique-rockeval"></canvas>
       </div>
+      <button type="button" class="secondaire-btn" id="exporter-btn">Exporter en CSV</button>
     </div>
 
     <footer>
@@ -271,6 +293,7 @@
     const champTmax = document.getElementById('tmax');
     const champType = document.getElementById('type-kerogene');
     const boutonGenerer = document.getElementById('generer-btn');
+    const boutonExporter = document.getElementById('exporter-btn');
     const zoneErreurs = document.getElementById('zone-erreurs');
 
     // Vérifie qu'un champ contient un nombre dans les bornes autorisées
@@ -449,6 +472,38 @@
 
     // Recalcule et retrace à chaque clic sur "Générer les courbes"
     boutonGenerer.addEventListener('click', genererEtAfficher);
+
+    // Construit un fichier CSV (température, S1, S2, S3) à partir des
+    // courbes actuellement affichées, et déclenche son téléchargement
+    // via un Blob créé côté navigateur — sans backend.
+    function exporterCSV() {
+      const pointsS1 = graphique.data.datasets[0].data;
+      const pointsS2 = graphique.data.datasets[1].data;
+      const pointsS3 = graphique.data.datasets[2].data;
+
+      const lignes = ['Temperature_C;S1;S2;S3'];
+
+      temperatures.forEach(function (temperature, index) {
+        const s1 = pointsS1[index] ? pointsS1[index].valeur.toFixed(3) : '';
+        const s2 = pointsS2[index] ? pointsS2[index].valeur.toFixed(3) : '';
+        const s3 = pointsS3[index] ? pointsS3[index].valeur.toFixed(3) : '';
+        lignes.push(temperature + ';' + s1 + ';' + s2 + ';' + s3);
+      });
+
+      const contenuCSV = lignes.join('\n');
+      const blob = new Blob([contenuCSV], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+
+      const lien = document.createElement('a');
+      lien.href = url;
+      lien.download = 'rockeval-courbes.csv';
+      document.body.appendChild(lien);
+      lien.click();
+      document.body.removeChild(lien);
+      URL.revokeObjectURL(url);
+    }
+
+    boutonExporter.addEventListener('click', exporterCSV);
   </script>
 </body>
 </html>
