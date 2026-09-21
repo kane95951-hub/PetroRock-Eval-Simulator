@@ -276,6 +276,7 @@
         <canvas id="graphique-rockeval"></canvas>
       </div>
       <button type="button" class="secondaire-btn" id="exporter-btn">Exporter en CSV</button>
+      <button type="button" class="secondaire-btn" id="exporter-image-btn">Exporter le graphique en image (PNG)</button>
     </div>
 
     <footer>
@@ -294,6 +295,7 @@
     const champType = document.getElementById('type-kerogene');
     const boutonGenerer = document.getElementById('generer-btn');
     const boutonExporter = document.getElementById('exporter-btn');
+    const boutonExporterImage = document.getElementById('exporter-image-btn');
     const zoneErreurs = document.getElementById('zone-erreurs');
 
     // Vérifie qu'un champ contient un nombre dans les bornes autorisées
@@ -423,6 +425,22 @@
       }
     };
 
+    // Le canvas est transparent par défaut : sans fond peint dessus, un
+    // export en image PNG donnerait un fichier avec un texte clair sur
+    // fond transparent (illisible une fois collé dans un rapport). Ce
+    // plugin peint un fond uni assorti au thème de la page, à l'écran
+    // comme à l'export.
+    const fondCanvasPlugin = {
+      id: 'fondCanvas',
+      beforeDraw(chart) {
+        const { ctx, width, height } = chart;
+        ctx.save();
+        ctx.fillStyle = '#114b4a';
+        ctx.fillRect(0, 0, width, height);
+        ctx.restore();
+      }
+    };
+
     // Création du graphique, avec trois courbes vides pour l'instant.
     // Chaque point est de la forme {temperature, valeur} — on indique à
     // Chart.js où lire x et y via "parsing", plutôt que de reformater
@@ -450,7 +468,7 @@
           y: { beginAtZero: true, title: { display: true, text: 'Valeur (mg/g roche)' } }
         }
       },
-      plugins: [ligneTmaxPlugin]
+      plugins: [fondCanvasPlugin, ligneTmaxPlugin]
     });
 
     // Recalcule les trois courbes à partir du formulaire et met à jour le graphique
@@ -504,6 +522,19 @@
     }
 
     boutonExporter.addEventListener('click', exporterCSV);
+
+    // Exporte le graphique tel qu'affiché en image PNG, via la fonction
+    // native de Chart.js (toBase64Image) — pas de traitement côté serveur.
+    function exporterImage() {
+      const lien = document.createElement('a');
+      lien.href = graphique.toBase64Image('image/png', 1);
+      lien.download = 'rockeval-graphique.png';
+      document.body.appendChild(lien);
+      lien.click();
+      document.body.removeChild(lien);
+    }
+
+    boutonExporterImage.addEventListener('click', exporterImage);
   </script>
 </body>
 </html>
