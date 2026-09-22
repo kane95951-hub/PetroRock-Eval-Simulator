@@ -6,11 +6,42 @@
 <title>PetroRock-Eval Simulator</title>
 <style>
   :root {
-    --deep: #0b2e33;
-    --mid: #114b4a;
-    --bright: #2f9e8f;
-    --paper: #eef6f4;
-    --ink: #0b2e33;
+    /* Dégradé de fond et couleur d'accent (identité de marque, inchangée
+       entre les deux thèmes). */
+    --grad-1: #0b2e33;
+    --grad-2: #114b4a;
+    --grad-3: #2f9e8f;
+    --accent: #2f9e8f;
+    --accent-rgb: 47, 158, 143;
+    --accent-text: #0b2e33;
+
+    /* Couleur de texte principale, sous forme de canaux R,G,B pour
+       pouvoir moduler l'opacité via rgba(var(--texte-rgb), X). */
+    --texte-rgb: 238, 246, 244;
+    --texte: rgb(var(--texte-rgb));
+
+    /* Teinte de survol des panneaux ("carte élevée") et des champs
+       ("creux") — inversées entre thème sombre et thème clair. */
+    --surface-rgb: 255, 255, 255;
+    --champ-rgb: 11, 46, 51;
+
+    /* Couleurs de statut, communes aux deux thèmes. */
+    --avertissement-rgb: 224, 178, 60;
+    --erreur-rgb: 224, 88, 92;
+  }
+
+  :root[data-theme="light"] {
+    --grad-1: #eaf6f2;
+    --grad-2: #dcefe9;
+    --grad-3: #bfe3d8;
+    --accent: #1f7a6d;
+    --accent-rgb: 31, 122, 109;
+    --accent-text: #ffffff;
+
+    --texte-rgb: 15, 46, 43;
+
+    --surface-rgb: 11, 46, 51;
+    --champ-rgb: 255, 255, 255;
   }
 
   * { box-sizing: border-box; }
@@ -23,13 +54,14 @@
 
   body {
     font-family: "Georgia", "Iowan Old Style", serif;
-    color: var(--paper);
-    background: linear-gradient(160deg, var(--deep) 0%, var(--mid) 55%, var(--bright) 100%);
+    color: var(--texte);
+    background: linear-gradient(160deg, var(--grad-1) 0%, var(--grad-2) 55%, var(--grad-3) 100%);
     background-attachment: fixed;
     display: flex;
     align-items: flex-start;
     justify-content: center;
     padding: 6vh 6vw 8vh;
+    transition: background 0.25s ease, color 0.25s ease;
   }
 
   main {
@@ -37,11 +69,32 @@
     width: 100%;
   }
 
+  .theme-toggle-conteneur {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 1rem;
+  }
+
+  .theme-toggle-btn {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.82rem;
+    padding: 0.4rem 0.85rem;
+    border-radius: 999px;
+    border: 1px solid rgba(var(--texte-rgb), 0.25);
+    background: rgba(var(--texte-rgb), 0.08);
+    color: var(--texte);
+    cursor: pointer;
+  }
+
+  .theme-toggle-btn:hover {
+    background: rgba(var(--texte-rgb), 0.14);
+  }
+
   .eyebrow {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     font-size: 0.95rem;
     letter-spacing: 0.02em;
-    color: rgba(238, 246, 244, 0.72);
+    color: rgba(var(--texte-rgb), 0.72);
     margin: 0 0 0.75rem 0;
   }
 
@@ -57,7 +110,7 @@
     font-size: 1.08rem;
     line-height: 1.65;
     max-width: 46ch;
-    color: rgba(238, 246, 244, 0.92);
+    color: rgba(var(--texte-rgb), 0.92);
     margin: 0 0 2.4rem 0;
   }
 
@@ -65,17 +118,17 @@
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     font-size: 0.85rem;
     line-height: 1.5;
-    color: rgba(238, 246, 244, 0.85);
-    background: rgba(224, 178, 60, 0.1);
-    border-left: 3px solid rgba(224, 178, 60, 0.6);
+    color: rgba(var(--texte-rgb), 0.85);
+    background: rgba(var(--avertissement-rgb), 0.14);
+    border-left: 3px solid rgba(var(--avertissement-rgb), 0.7);
     padding: 0.65rem 0.95rem;
     border-radius: 6px;
     margin: 0 0 2rem 0;
   }
 
   .panel {
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(238, 246, 244, 0.18);
+    background: rgba(var(--surface-rgb), 0.06);
+    border: 1px solid rgba(var(--texte-rgb), 0.18);
     border-radius: 10px;
     padding: 1.6rem 1.75rem 1.8rem;
     margin: 0 0 2.4rem 0;
@@ -87,7 +140,7 @@
     letter-spacing: 0.06em;
     text-transform: uppercase;
     font-weight: 600;
-    color: rgba(238, 246, 244, 0.75);
+    color: rgba(var(--texte-rgb), 0.75);
     margin: 0 0 1.3rem 0;
   }
 
@@ -99,13 +152,13 @@
     display: block;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     font-size: 0.92rem;
-    color: rgba(238, 246, 244, 0.88);
+    color: rgba(var(--texte-rgb), 0.88);
     margin-bottom: 0.4rem;
   }
 
   .field .hint {
     font-weight: 400;
-    color: rgba(238, 246, 244, 0.5);
+    color: rgba(var(--texte-rgb), 0.5);
     font-size: 0.82rem;
   }
 
@@ -114,40 +167,23 @@
     width: 100%;
     padding: 0.6rem 0.75rem;
     border-radius: 6px;
-    border: 1px solid rgba(238, 246, 244, 0.22);
-    background: rgba(11, 46, 51, 0.4);
-    color: var(--paper);
+    border: 1px solid rgba(var(--texte-rgb), 0.22);
+    background: rgba(var(--champ-rgb), 0.4);
+    color: var(--texte);
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     font-size: 1rem;
   }
 
   .field select option {
-    background: var(--deep);
-    color: var(--paper);
+    background: var(--grad-1);
+    color: var(--texte);
   }
 
   .field input[type="number"]:focus,
   .field select:focus {
     outline: none;
-    border-color: var(--bright);
-    box-shadow: 0 0 0 3px rgba(47, 158, 143, 0.28);
-  }
-
-  .generer-btn {
-    display: block;
-    width: 100%;
-    margin-top: 0.4rem;
-    padding: 0.7rem 1.5rem;
-    border: none;
-    border-radius: 6px;
-    background: var(--bright);
-    color: var(--deep);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    font-size: 0.98rem;
-    font-weight: 600;
-    text-align: center;
-    cursor: pointer;
-    transition: filter 0.15s ease;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.28);
   }
 
   .field.invalide input,
@@ -160,12 +196,29 @@
     margin-top: 0.9rem;
     padding: 0.65rem 0.85rem;
     border-radius: 6px;
-    background: rgba(224, 88, 92, 0.12);
-    border: 1px solid rgba(224, 88, 92, 0.4);
-    color: rgba(255, 224, 224, 0.95);
+    background: rgba(var(--erreur-rgb), 0.16);
+    border: 1px solid rgba(var(--erreur-rgb), 0.55);
+    color: var(--texte);
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     font-size: 0.88rem;
     line-height: 1.5;
+  }
+
+  .generer-btn {
+    display: block;
+    width: 100%;
+    margin-top: 0.4rem;
+    padding: 0.7rem 1.5rem;
+    border: none;
+    border-radius: 6px;
+    background: var(--accent);
+    color: var(--accent-text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.98rem;
+    font-weight: 600;
+    text-align: center;
+    cursor: pointer;
+    transition: filter 0.15s ease;
   }
 
   .generer-btn:hover {
@@ -177,10 +230,10 @@
     width: 100%;
     margin-top: 1rem;
     padding: 0.65rem 1.5rem;
-    border: 1px solid rgba(47, 158, 143, 0.55);
+    border: 1px solid rgba(var(--accent-rgb), 0.55);
     border-radius: 6px;
     background: transparent;
-    color: var(--paper);
+    color: var(--texte);
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     font-size: 0.95rem;
     font-weight: 600;
@@ -190,7 +243,7 @@
   }
 
   .secondaire-btn:hover {
-    background: rgba(47, 158, 143, 0.12);
+    background: rgba(var(--accent-rgb), 0.12);
   }
 
   .graphique-conteneur {
@@ -206,8 +259,8 @@
   footer {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     font-size: 0.85rem;
-    color: rgba(238, 246, 244, 0.55);
-    border-top: 1px solid rgba(238, 246, 244, 0.2);
+    color: rgba(var(--texte-rgb), 0.55);
+    border-top: 1px solid rgba(var(--texte-rgb), 0.2);
     padding-top: 1rem;
   }
 
@@ -218,6 +271,10 @@
 </head>
 <body>
   <main>
+    <div class="theme-toggle-conteneur">
+      <button type="button" class="theme-toggle-btn" id="theme-toggle">☀️ Clair</button>
+    </div>
+
     <p class="eyebrow">Simulateur pédagogique de pyrolyse Rock-Eval</p>
     <h1>PetroRock-Eval Simulator</h1>
     <p class="lede">
@@ -287,7 +344,7 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
   <script src="script.js"></script>
   <script>
-    // Références aux champs du formulaire et au bouton
+    // Références aux champs du formulaire et aux boutons
     const champTOC = document.getElementById('toc');
     const champHI = document.getElementById('hi');
     const champIO = document.getElementById('io');
@@ -296,7 +353,49 @@
     const boutonGenerer = document.getElementById('generer-btn');
     const boutonExporter = document.getElementById('exporter-btn');
     const boutonExporterImage = document.getElementById('exporter-image-btn');
+    const boutonTheme = document.getElementById('theme-toggle');
     const zoneErreurs = document.getElementById('zone-erreurs');
+
+    // --- Thème sombre / clair ---------------------------------------
+    // Chart.js ne lit pas les variables CSS de la page : ses propres
+    // couleurs (texte, grille, fond du canvas, ligne de Tmax) doivent
+    // être mises à jour "à la main" quand on change de thème.
+    const themeCouleurs = {
+      dark: {
+        texteChart: 'rgba(238, 246, 244, 0.85)',
+        grilleChart: 'rgba(238, 246, 244, 0.12)',
+        fondCanvas: '#114b4a',
+        ligneTrait: 'rgba(238, 246, 244, 0.55)',
+        ligneTexte: 'rgba(238, 246, 244, 0.9)'
+      },
+      light: {
+        texteChart: 'rgba(15, 46, 43, 0.85)',
+        grilleChart: 'rgba(15, 46, 43, 0.12)',
+        fondCanvas: '#eef6f4',
+        ligneTrait: 'rgba(15, 46, 43, 0.55)',
+        ligneTexte: 'rgba(15, 46, 43, 0.9)'
+      }
+    };
+
+    // Thème mémorisé d'une visite à l'autre (si le stockage local est
+    // disponible), sombre par défaut sinon.
+    let themeActuel = 'dark';
+    try {
+      themeActuel = localStorage.getItem('rockeval-theme') || 'dark';
+    } catch (erreur) {
+      // Stockage indisponible (navigation privée, etc.) : on reste en sombre.
+    }
+    document.documentElement.setAttribute('data-theme', themeActuel);
+    boutonTheme.textContent = themeActuel === 'light' ? '🌙 Sombre' : '☀️ Clair';
+
+    // Couleurs utilisées par les plugins Chart.js ci-dessous ; mises à
+    // jour par appliquerTheme() à chaque bascule.
+    let fondCanvasCouleur = themeCouleurs[themeActuel].fondCanvas;
+    let ligneTmaxCouleurTrait = themeCouleurs[themeActuel].ligneTrait;
+    let ligneTmaxCouleurTexte = themeCouleurs[themeActuel].ligneTexte;
+    Chart.defaults.color = themeCouleurs[themeActuel].texteChart;
+    Chart.defaults.borderColor = themeCouleurs[themeActuel].grilleChart;
+    Chart.defaults.font.family = "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
 
     // Vérifie qu'un champ contient un nombre dans les bornes autorisées
     // (min/max définis directement sur l'input HTML). Retourne un
@@ -385,17 +484,25 @@
       return { s1: s1, s2: s2, s3: s3, tmax: tmax };
     }
 
-    // Couleurs de texte/grille par défaut pour Chart.js : le fond de la
-    // page étant sombre, on éclaircit tout ce qui est écrit ou tracé en
-    // fin (légende, titres d'axes, graduations, lignes de grille), sinon
-    // Chart.js utilise par défaut du texte foncé, peu lisible ici.
-    Chart.defaults.color = 'rgba(238, 246, 244, 0.85)';
-    Chart.defaults.borderColor = 'rgba(238, 246, 244, 0.12)';
-    Chart.defaults.font.family = "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
-
     // Mémorise le tmax actuellement affiché, pour que le plugin
     // ci-dessous sache où tracer sa ligne verticale.
     let tmaxActuel = parseFloat(champTmax.value);
+
+    // Le canvas est transparent par défaut : sans fond peint dessus, un
+    // export en image PNG donnerait un fichier avec un texte clair sur
+    // fond transparent (illisible une fois collé dans un rapport). Ce
+    // plugin peint un fond uni assorti au thème actuel, à l'écran comme
+    // à l'export.
+    const fondCanvasPlugin = {
+      id: 'fondCanvas',
+      beforeDraw(chart) {
+        const { ctx, width, height } = chart;
+        ctx.save();
+        ctx.fillStyle = fondCanvasCouleur;
+        ctx.fillRect(0, 0, width, height);
+        ctx.restore();
+      }
+    };
 
     // Petit plugin Chart.js "maison" (pas de librairie externe) qui
     // dessine une ligne verticale pointillée à la position de tmax,
@@ -408,7 +515,7 @@
         if (xPixel < chartArea.left || xPixel > chartArea.right) return;
 
         ctx.save();
-        ctx.strokeStyle = 'rgba(238, 246, 244, 0.55)';
+        ctx.strokeStyle = ligneTmaxCouleurTrait;
         ctx.setLineDash([5, 4]);
         ctx.lineWidth = 1;
         ctx.beginPath();
@@ -417,26 +524,10 @@
         ctx.stroke();
 
         ctx.setLineDash([]);
-        ctx.fillStyle = 'rgba(238, 246, 244, 0.9)';
+        ctx.fillStyle = ligneTmaxCouleurTexte;
         ctx.font = "11px -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
         ctx.textAlign = 'center';
         ctx.fillText('Tmax = ' + tmaxActuel + '°C', xPixel, chartArea.top - 6);
-        ctx.restore();
-      }
-    };
-
-    // Le canvas est transparent par défaut : sans fond peint dessus, un
-    // export en image PNG donnerait un fichier avec un texte clair sur
-    // fond transparent (illisible une fois collé dans un rapport). Ce
-    // plugin peint un fond uni assorti au thème de la page, à l'écran
-    // comme à l'export.
-    const fondCanvasPlugin = {
-      id: 'fondCanvas',
-      beforeDraw(chart) {
-        const { ctx, width, height } = chart;
-        ctx.save();
-        ctx.fillStyle = '#114b4a';
-        ctx.fillRect(0, 0, width, height);
         ctx.restore();
       }
     };
@@ -535,6 +626,36 @@
     }
 
     boutonExporterImage.addEventListener('click', exporterImage);
+
+    // Bascule entre thème sombre et thème clair : change l'attribut
+    // data-theme (ce qui suffit pour toute la mise en page en CSS),
+    // met à jour les couleurs "à la main" côté Chart.js, mémorise le
+    // choix, et retrace le graphique avec les nouvelles couleurs.
+    function appliquerTheme(theme) {
+      themeActuel = theme;
+      document.documentElement.setAttribute('data-theme', theme);
+
+      const couleurs = themeCouleurs[theme];
+      Chart.defaults.color = couleurs.texteChart;
+      Chart.defaults.borderColor = couleurs.grilleChart;
+      fondCanvasCouleur = couleurs.fondCanvas;
+      ligneTmaxCouleurTrait = couleurs.ligneTrait;
+      ligneTmaxCouleurTexte = couleurs.ligneTexte;
+
+      boutonTheme.textContent = theme === 'light' ? '🌙 Sombre' : '☀️ Clair';
+
+      try {
+        localStorage.setItem('rockeval-theme', theme);
+      } catch (erreur) {
+        // Stockage indisponible : le choix ne sera pas mémorisé, tant pis.
+      }
+
+      graphique.update();
+    }
+
+    boutonTheme.addEventListener('click', function () {
+      appliquerTheme(themeActuel === 'light' ? 'dark' : 'light');
+    });
   </script>
 </body>
 </html>
