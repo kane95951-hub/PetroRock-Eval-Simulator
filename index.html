@@ -409,7 +409,11 @@
         return nomAffiche + ' doit être un nombre.';
       }
       if (valeur < min || valeur > max) {
-        return nomAffiche + ' doit être compris entre ' + min + ' et ' + max + ' ' + unite + '.';
+        // toLocaleString('fr-FR') affiche une virgule décimale (0,1) plutôt
+        // qu'un point (0.1), plus correct en français.
+        const minAffiche = min.toLocaleString('fr-FR');
+        const maxAffiche = max.toLocaleString('fr-FR');
+        return nomAffiche + ' doit être compris entre ' + minAffiche + ' et ' + maxAffiche + ' ' + unite + '.';
       }
       return null;
     }
@@ -527,7 +531,7 @@
         ctx.fillStyle = ligneTmaxCouleurTexte;
         ctx.font = "11px -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
         ctx.textAlign = 'center';
-        ctx.fillText('Tmax = ' + tmaxActuel + '°C', xPixel, chartArea.top - 6);
+        ctx.fillText('Tmax = ' + tmaxActuel + ' °C', xPixel, chartArea.top - 6);
         ctx.restore();
       }
     };
