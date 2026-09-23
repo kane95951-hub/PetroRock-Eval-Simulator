@@ -8,9 +8,9 @@
   :root {
     /* Dégradé de fond et couleur d'accent (identité de marque, inchangée
        entre les deux thèmes). */
-    --grad-1: #0b2e33;
-    --grad-2: #114b4a;
-    --grad-3: #2f9e8f;
+    --grad-1: #121212;
+    --grad-2: #191919;
+    --grad-3: #202020;
     --accent: #2f9e8f;
     --accent-rgb: 47, 158, 143;
     --accent-text: #0b2e33;
@@ -364,7 +364,7 @@
       dark: {
         texteChart: 'rgba(238, 246, 244, 0.85)',
         grilleChart: 'rgba(238, 246, 244, 0.12)',
-        fondCanvas: '#114b4a',
+        fondCanvas: '#1a1a1a',
         ligneTrait: 'rgba(238, 246, 244, 0.55)',
         ligneTexte: 'rgba(238, 246, 244, 0.9)'
       },
@@ -556,7 +556,7 @@
         parsing: { xAxisKey: 'temperature', yAxisKey: 'valeur' },
         layout: { padding: { top: 20 } },
         plugins: {
-          legend: { position: 'top', labels: { usePointStyle: true, boxWidth: 8 } }
+          legend: { position: 'bottom', labels: { usePointStyle: true, boxWidth: 8 } }
         },
         scales: {
           x: { type: 'linear', min: 300, max: 650, title: { display: true, text: 'Température (°C)' } },
