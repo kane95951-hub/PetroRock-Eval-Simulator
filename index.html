@@ -663,5 +663,19 @@
       appliquerTheme(themeActuel === 'light' ? 'dark' : 'light');
     });
   </script>
+
+  <script>
+    // Enregistre le service worker (sw.js) pour permettre un fonctionnement
+    // hors-ligne basique. "in navigator" vérifie que le navigateur supporte
+    // cette fonctionnalité avant d'essayer — certains anciens navigateurs ne
+    // la supportent pas.
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function () {
+        navigator.serviceWorker.register('sw.js').catch(function (erreur) {
+          console.warn('Échec de l\'enregistrement du service worker :', erreur);
+        });
+      });
+    }
+  </script>
 </body>
 </html>
