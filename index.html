@@ -388,7 +388,7 @@
       // Stockage indisponible (navigation privée, etc.) : on reste en sombre.
     }
     document.documentElement.setAttribute('data-theme', themeActuel);
-    boutonTheme.textContent = themeActuel === 'light' ? '🌙 Sombre' : '☀️ Clair';
+    boutonTheme.textContent = themeActuel === 'light' ? '☀️ Clair' : '🌙 Sombre';
 
     // Couleurs utilisées par les plugins Chart.js ci-dessous ; mises à
     // jour par appliquerTheme() à chaque bascule.
@@ -648,7 +648,7 @@
       ligneTmaxCouleurTrait = couleurs.ligneTrait;
       ligneTmaxCouleurTexte = couleurs.ligneTexte;
 
-      boutonTheme.textContent = theme === 'light' ? '🌙 Sombre' : '☀️ Clair';
+      boutonTheme.textContent = theme === 'light' ? '☀️ Clair' : '🌙 Sombre';
 
       try {
         localStorage.setItem('rockeval-theme', theme);
