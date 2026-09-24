@@ -206,6 +206,49 @@
     line-height: 1.5;
   }
 
+  .a-propos-panel summary {
+    cursor: pointer;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.85rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: rgba(var(--texte-rgb), 0.75);
+  }
+
+  .a-propos-panel summary::marker {
+    color: var(--accent);
+  }
+
+  .a-propos-panel p,
+  .a-propos-panel li {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: rgba(var(--texte-rgb), 0.88);
+  }
+
+  .a-propos-panel p {
+    margin: 0.9rem 0 0 0;
+  }
+
+  .a-propos-panel ul {
+    margin: 0.6rem 0 0 0;
+    padding-left: 1.2rem;
+  }
+
+  .a-propos-panel li + li {
+    margin-top: 0.3rem;
+  }
+
+  .a-propos-panel code {
+    font-family: "SFMono-Regular", Consolas, monospace;
+    font-size: 0.85em;
+    background: rgba(var(--texte-rgb), 0.1);
+    padding: 0.1em 0.35em;
+    border-radius: 4px;
+  }
+
   .generer-btn {
     display: block;
     width: 100%;
@@ -336,6 +379,29 @@
       </div>
       <button type="button" class="secondaire-btn" id="exporter-btn">Exporter en CSV</button>
       <button type="button" class="secondaire-btn" id="exporter-image-btn">Exporter le graphique en image (PNG)</button>
+    </div>
+
+    <div class="panel a-propos-panel">
+      <details>
+        <summary>À propos du modèle</summary>
+        <p>
+          Ce simulateur ne mesure rien : il <strong>construit</strong> des
+          courbes plausibles à partir des quatre valeurs saisies, selon des
+          règles volontairement simplifiées.
+        </p>
+        <ul>
+          <li><strong>S2</strong> se calcule directement à partir de HI et TOC, et forme un pic dont le sommet tombe sur Tmax.</li>
+          <li><strong>S3</strong> se calcule à partir de IO et TOC, en un pic plus large, toujours centré vers 400°C — sa position ne dépend pas de Tmax.</li>
+          <li><strong>S1</strong> n'a pas de champ dédié dans le formulaire : il est estimé comme une petite fraction de S2, ce qui reste une approximation.</li>
+        </ul>
+        <p>
+          Les positions et largeurs de ces trois pics sont des valeurs fixes,
+          choisies pour donner une allure réaliste — elles ne sont pas
+          calibrées sur des mesures de laboratoire. Le détail complet des
+          simplifications assumées est dans le <code>README.md</code> du
+          dépôt.
+        </p>
+      </details>
     </div>
 
     <footer>
