@@ -1,4 +1,22 @@
 /**
+ * script.js — Génération des trois courbes de pyrolyse Rock-Eval (S1, S2, S3).
+ *
+ * Ce fichier ne contient que la partie "modèle mathématique" du simulateur :
+ * trois fonctions, chacune indépendante, qui transforment un jeu de
+ * paramètres (TOC, HI, IO, Tmax, saisis dans index.html) en un tableau de
+ * points {temperature, valeur} prêt à être tracé avec Chart.js.
+ *
+ * Toute la logique d'interface (formulaire, validation, graphique, thème,
+ * exports) vit dans le <script> de index.html — ce fichier reste focalisé
+ * sur le calcul, pour rester facile à tester et à faire évoluer séparément.
+ *
+ * Les trois courbes sont des gaussiennes (voir gaussienne() ci-dessous),
+ * choisies pour leur forme réaliste plutôt que pour une exactitude
+ * scientifique stricte — voir la section "Limites scientifiques" du
+ * README.md du dépôt pour le détail des simplifications assumées.
+ */
+
+/**
  * Calcule la valeur d'une gaussienne à une température donnée.
  *
  * Fonction utilitaire commune à genererS1, genererS2 et genererS3 :
