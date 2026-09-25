@@ -4,7 +4,7 @@ Simulateur pédagogique de pyrolyse Rock-Eval — visualise, de façon simplifi�
 
 **Démo en ligne :** [kane95951-hub.github.io/PetroRock-Eval-Simulator](https://kane95951-hub.github.io/PetroRock-Eval-Simulator/)
 
-Projet étudiant — EHES, Génie Pétrolier et Gaz, Groupe 01, Dakar. Réalisé avec l'assistance de Claude (Anthropic).
+Projet étudiant — EHES, Génie Pétrolier et Gaz, Dakar. Réalisé avec l'assistance de Claude (Anthropic).
 
 ## À quoi ça sert ?
 
@@ -72,4 +72,4 @@ HTML, CSS et JavaScript natifs (aucun framework) pour le code, [Chart.js](https:
 
 ## Auteur
 
-Ousmane Kane — EHES, Génie Pétrolier et Gaz, Groupe 01, Dakar
+Ousmane Kane — EHES, Génie Pétrolier et Gaz, Dakar
