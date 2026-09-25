@@ -38,7 +38,13 @@ Le simulateur ne mesure rien : il **génère** des courbes plausibles à partir 
 - La position et la largeur des pics (centre de S1 à 300°C, centre de S3 à 400°C, largeurs des trois pics) sont des valeurs fixes choisies pour donner une allure réaliste, pas calibrées sur des jeux de données mesurés
 - Aucune variable de temps de rétention, de vitesse de chauffe ou d'appareil réel n'est prise en compte
 
-Les sources scientifiques précises ayant inspiré ce modèle simplifié seront listées ici une fois vérifiées (voir la feuille de route du projet, semaine 7).
+Les sources scientifiques précises ayant inspiré ce modèle simplifié sont listées ci-dessous.
+
+## Sources scientifiques
+
+- Behar, F., Beaumont, V., De B. Penteado, H.L. (2001). *Rock-Eval 6 Technology: Performances and Developments*. Oil & Gas Science and Technology – Rev. IFP, 56(2), 111-134. [doi:10.2516/ogst:2001013](https://doi.org/10.2516/ogst:2001013) — décrit les paramètres Rock-Eval (S1, S2, S3, TOC, Tmax) et leur méthode d'acquisition.
+- IFP Énergies nouvelles (IFPEN). [*Rock-Eval® : analyse thermique des roches et des sols*](https://www.ifpenergiesnouvelles.fr/breve/rock-evalr-analyse-thermique-des-roches-et-des-sols) et [*Rock-Eval® : pour aller plus loin*](https://www.ifpenergiesnouvelles.fr/breve/rock-evalr-aller-plus-loin) — présentation générale de la méthode et des indices dérivés (HI, IO).
+- Pimmel, A., and Claypool, G. (2001). *Introduction to Shipboard Organic Geochemistry on the JOIDES Resolution*. ODP Tech. Note, 30. [doi:10.2973/odp.tn.30.2001](https://doi.org/10.2973/odp.tn.30.2001) — définit notamment HI, IO et confirme que le pic S3 est mesuré jusqu'à environ 390°C, cohérent avec le centre choisi (400°C) pour la courbe S3 de ce simulateur.
 
 ## Utilisation
 
