@@ -1,5 +1,10 @@
 # Journal des modifications
 
+## 2.0.2 — 2026-09-26
+
+- Ajout d’un guide de démarrage court en quatre étapes, affiché à la première visite et rouvrable depuis l’en-tête.
+- Chaque étape du guide ouvre directement l’onglet concerné; contenu disponible en français et en anglais.
+
 ## 2.0.1 — 2026-09-26
 
 - Ressources CSS et JavaScript renommées pour éviter la réutilisation des anciens fichiers mis en cache par la version précédente du site.

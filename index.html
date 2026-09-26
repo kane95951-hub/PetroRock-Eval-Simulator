@@ -8,7 +8,7 @@
   <title>PetroRock-Eval — laboratoire numérique</title>
   <link rel="icon" href="icon.svg" type="image/svg+xml">
   <link rel="manifest" href="manifest.json">
-  <link rel="stylesheet" href="styles.v2.css">
+  <link rel="stylesheet" href="styles.v2.0.2.css">
 </head>
 <body>
   <a class="skip-link" href="#workspace" data-i18n="skip">Aller au contenu</a>
@@ -19,6 +19,7 @@
     </a>
     <div class="header-actions">
       <span class="offline-indicator" id="offline-indicator"><i></i><span data-i18n="online">En ligne</span></span>
+      <button class="icon-button guide-trigger" id="guide-toggle" type="button" aria-label="Ouvrir le guide de démarrage"><span data-guide-i18n="button">Guide</span></button>
       <button class="icon-button" id="language-toggle" type="button" aria-label="Switch language">EN</button>
       <button class="icon-button" id="theme-toggle" type="button" aria-label="Changer de thème">☼</button>
     </div>
@@ -129,11 +130,24 @@
       <div class="panel history-panel"><div class="panel-heading"><div><span class="panel-kicker" data-i18n="browser-history">STOCKAGE LOCAL</span><h3 data-i18n="scenario-history">Historique des scénarios</h3></div><button class="text-button" id="clear-history" type="button" data-i18n="clear-history">Vider l’historique</button></div><div class="history-list" id="history-list"></div><p class="fine-print" data-i18n="history-privacy">Les scénarios enregistrés restent dans le stockage local de ce navigateur.</p></div>
     </section>
 
-    <footer class="site-footer"><div><b>PetroRock-Eval</b><span data-i18n="footer-tagline">Outil éducatif · traitement local · données non transmises</span></div><div><a href="README.md" data-i18n="documentation">Documentation</a><span>v2.0.1 · 2026</span></div></footer>
+    <footer class="site-footer"><div><b>PetroRock-Eval</b><span data-i18n="footer-tagline">Outil éducatif · traitement local · données non transmises</span></div><div><a href="README.md" data-i18n="documentation">Documentation</a><span>v2.0.2 · 2026</span></div></footer>
   </main>
+  <dialog class="guide-dialog" id="quick-guide" aria-labelledby="guide-title">
+    <div class="guide-content">
+      <div class="guide-heading"><div><p class="eyebrow" data-guide-i18n="eyebrow">GUIDE DE DÉMARRAGE</p><h2 id="guide-title" data-guide-i18n="title">Bien démarrer en 1 minute</h2><p data-guide-i18n="intro">Suis les quatre onglets de gauche à droite. Tu peux revenir en arrière à tout moment.</p></div><button class="guide-close" id="guide-close" type="button" aria-label="Fermer le guide">×</button></div>
+      <div class="guide-steps">
+        <section class="guide-step"><span class="guide-step-number">01</span><h3 data-guide-i18n="step1-title">Saisis ton scénario</h3><p data-guide-i18n="step1-copy">Choisis un type de matière, renseigne TOC, S1, HI, OI et Tmax, puis génère le scénario. S1 se règle séparément.</p><button type="button" data-guide-pane="simulation" data-guide-i18n="step1-link">Ouvrir les entrées</button></section>
+        <section class="guide-step"><span class="guide-step-number">02</span><h3 data-guide-i18n="step2-title">Observe le pyrogramme</h3><p data-guide-i18n="step2-copy">Les courbes montrent S1, S2 et S3. En mode détecté, Tmax est lu au sommet de S2.</p><button type="button" data-guide-pane="pyrogramme" data-guide-i18n="step2-link">Voir les courbes</button></section>
+        <section class="guide-step"><span class="guide-step-number">03</span><h3 data-guide-i18n="step3-title">Lis les résultats</h3><p data-guide-i18n="step3-copy">Consulte HI, OI, PI, PY et les alertes QC. Une alerte indique un point à vérifier, pas un diagnostic.</p><button type="button" data-guide-pane="interpretation" data-guide-i18n="step3-link">Voir les résultats</button></section>
+        <section class="guide-step"><span class="guide-step-number">04</span><h3 data-guide-i18n="step4-title">Analyse tes données</h3><p data-guide-i18n="step4-copy">Importe un fichier CSV, TSV ou XLSX, vérifie les colonnes puis valide. Tu peux exporter le tableau ou préparer un rapport PDF.</p><button type="button" data-guide-pane="data" data-guide-i18n="step4-link">Importer des données</button></section>
+      </div>
+      <p class="guide-note" data-guide-i18n="note">Ces simulations servent à apprendre. Vérifie toujours les unités et le contexte de tes données.</p>
+      <button class="primary-button guide-done" id="guide-done" type="button" data-guide-i18n="done">Compris, commencer</button>
+    </div>
+  </dialog>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <article id="print-report" class="print-report" aria-hidden="true"></article>
-  <script src="script.v2.js" defer></script>
+  <script src="script.v2.0.2.js" defer></script>
 </body>
 </html>
 

@@ -3,7 +3,7 @@
 **Laboratoire numérique pédagogique** pour explorer les signaux de pyrolyse Rock-Eval, calculer les indices dérivés et analyser des tableaux d’échantillons.
 
 - **Application publiée :** <https://kane95951-hub.github.io/PetroRock-Eval-Simulator/>
-- **Version :** 2.0.1
+- **Version :** 2.0.2
 - **Hébergement :** GitHub Pages, dépôt statique, sans serveur ni compte utilisateur dans l’application.
 
 > **Limite d’usage.** Les courbes synthétiques, interprétations et alertes QC sont des aides pédagogiques. Elles ne remplacent ni une analyse instrumentale Rock-Eval, ni un contrôle qualité de laboratoire, ni l’interprétation géologique contextualisée.
@@ -15,7 +15,7 @@
 3. **Interprétation** — lire TOC, HI, OI, PI, PY et Tmax avec leurs unités; consulter les alertes de cohérence et le diagramme HI/OI; comparer deux scénarios sauvegardés; explorer la sensibilité par 500 tirages Monte-Carlo.
 4. **Données & rapports** — importer un fichier CSV, TSV ou Excel `.xlsx`, associer les colonnes, calculer les indices, inspecter les tendances par profondeur, exporter une table enrichie et imprimer un rapport enregistrable en PDF.
 
-Le laboratoire numérique propose les modes **Guidé**, **Examen** et **Défi**. La rampe animée suit 250, 300, 400, 450 et 600 °C. Les cas de défi masquent les indices avant la réponse. Une bibliothèque rappelle les paramètres principaux et leurs unités.
+Le laboratoire numérique propose les modes **Guidé**, **Examen** et **Défi**. La rampe animée suit 250, 300, 400, 450 et 600 °C. Les cas de défi masquent les indices avant la réponse. Une bibliothèque rappelle les paramètres principaux et leurs unités. Un guide de démarrage en une minute accompagne les nouvelles visites et reste accessible dans l’en-tête.
 
 ## Modèle et équations
 
@@ -83,8 +83,8 @@ GitHub Pages sert la racine de la branche `main`. Les changements sur cette bran
 
 ```text
 index.html      interface et espaces de travail
-styles.v2.css   thèmes, mise en page responsive, impression
-script.v2.js    génération des signaux, indices, QC, import/export, graphiques
+styles.v2.0.2.css  thèmes, mise en page responsive, impression et guide
+script.v2.0.2.js   génération des signaux, indices, QC, import/export, graphiques et guide
 manifest.json   manifeste PWA
 sw.js           cache hors ligne versionné
 icon.svg        icône de l’application
