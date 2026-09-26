@@ -1,12 +1,12 @@
 /* Cache applicatif versionné pour GitHub Pages et l'usage hors ligne. */
 'use strict';
 
-const CACHE_NAME = 'petro-rockeval-shell-v2.0.2';
+const CACHE_NAME = 'petro-rockeval-shell-v2.0.3';
 const APP_SHELL = [
   './',
   './index.html',
-  './styles.v2.0.2.css',
-  './script.v2.0.2.js',
+  './styles.v2.0.3.css',
+  './script.v2.0.3.js',
   './manifest.json',
   './icon.svg',
   './icons/icon-192.png',

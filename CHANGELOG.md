@@ -1,5 +1,10 @@
 # Journal des modifications
 
+## 2.0.3 — 2026-09-26
+
+- Guide de démarrage resserré pour mieux afficher son bouton de fin dans les fenêtres courtes.
+- Ressources versionnées pour appliquer correctement la mise en page mise à jour après publication.
+
 ## 2.0.2 — 2026-09-26
 
 - Ajout d’un guide de démarrage court en quatre étapes, affiché à la première visite et rouvrable depuis l’en-tête.
