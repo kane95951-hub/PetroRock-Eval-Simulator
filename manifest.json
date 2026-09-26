@@ -1,1 +1,19 @@
-{"name":"PetroRock-Eval Digital Laboratory","short_name":"PetroRock-Eval","start_url":"./","display":"standalone","background_color":"#f5f7f9","theme_color":"#0f766e","description":"Laboratoire numérique pédagogique Rock-Eval."}
+{
+  "id": "./",
+  "name": "PetroRock-Eval — laboratoire numérique",
+  "short_name": "PetroRock-Eval",
+  "description": "Laboratoire numérique pédagogique pour la simulation et l’analyse de données Rock-Eval.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#10251f",
+  "theme_color": "#10251f",
+  "lang": "fr",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
+
