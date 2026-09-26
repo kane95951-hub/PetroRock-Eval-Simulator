@@ -1,5 +1,10 @@
 # Journal des modifications
 
+## 2.0.5 — 2026-09-26
+
+- Ajout d’une vue 2D animée du four de pyrolyse, de l’échantillon, de la ligne de gaz schématique et des signaux S1/S2/S3.
+- La température, les pics, Tmax, les états de chauffe/pause et les libellés FR/EN suivent le cycle de simulation.
+
 ## 2.0.4 — 2026-09-26
 
 - La page principale vérifie d’abord la version en ligne; le cache local sert de secours hors connexion.
