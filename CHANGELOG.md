@@ -1,5 +1,9 @@
 # Journal des modifications
 
+## 2.0.4 — 2026-09-26
+
+- La page principale vérifie d’abord la version en ligne; le cache local sert de secours hors connexion.
+
 ## 2.0.3 — 2026-09-26
 
 - Guide de démarrage resserré pour mieux afficher son bouton de fin dans les fenêtres courtes.

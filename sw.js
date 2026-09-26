@@ -1,7 +1,7 @@
 /* Cache applicatif versionné pour GitHub Pages et l'usage hors ligne. */
 'use strict';
 
-const CACHE_NAME = 'petro-rockeval-shell-v2.0.3';
+const CACHE_NAME = 'petro-rockeval-shell-v2.0.4';
 const APP_SHELL = [
   './',
   './index.html',
@@ -37,11 +37,12 @@ self.addEventListener('fetch', event => {
   event.respondWith((async () => {
     const cache = await caches.open(CACHE_NAME);
     const cached = await cache.match(request, { ignoreSearch: true });
-    const refresh = fetch(request).then(response => {
+    const refresh = fetch(request, request.mode === 'navigate' ? { cache: 'no-cache' } : undefined).then(response => {
       if (response.ok && response.type === 'basic') cache.put(request, response.clone());
       return response;
-    }).catch(() => cached || (request.mode === 'navigate' ? cache.match('./index.html') : undefined));
-    return cached || await refresh;
+    }).catch(() => null);
+    if (request.mode === 'navigate') return await refresh || cached || await cache.match('./index.html');
+    return cached || await refresh || await cache.match('./index.html');
   })());
 });
 
