@@ -3,7 +3,7 @@
 **Laboratoire numérique pédagogique** pour explorer les signaux de pyrolyse Rock-Eval, calculer les indices dérivés et analyser des tableaux d’échantillons.
 
 - **Application publiée :** <https://kane95951-hub.github.io/PetroRock-Eval-Simulator/>
-- **Version :** 2.0.0
+- **Version :** 2.0.1
 - **Hébergement :** GitHub Pages, dépôt statique, sans serveur ni compte utilisateur dans l’application.
 
 > **Limite d’usage.** Les courbes synthétiques, interprétations et alertes QC sont des aides pédagogiques. Elles ne remplacent ni une analyse instrumentale Rock-Eval, ni un contrôle qualité de laboratoire, ni l’interprétation géologique contextualisée.
@@ -83,8 +83,8 @@ GitHub Pages sert la racine de la branche `main`. Les changements sur cette bran
 
 ```text
 index.html      interface et espaces de travail
-styles.css      thèmes, mise en page responsive, impression
-script.js       génération des signaux, indices, QC, import/export, graphiques
+styles.v2.css   thèmes, mise en page responsive, impression
+script.v2.js    génération des signaux, indices, QC, import/export, graphiques
 manifest.json   manifeste PWA
 sw.js           cache hors ligne versionné
 icon.svg        icône de l’application

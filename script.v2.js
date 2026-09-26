@@ -1,4 +1,4 @@
-/* PetroRock-Eval Simulator v2.0 — moteur de simulation et d'analyse client-side.
+/* PetroRock-Eval Simulator v2.0.1 — moteur de simulation et d'analyse client-side.
    Les données choisies par l'utilisateur restent dans le navigateur. */
 'use strict';
 

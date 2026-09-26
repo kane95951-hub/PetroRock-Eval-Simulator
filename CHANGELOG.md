@@ -1,5 +1,10 @@
 # Journal des modifications
 
+## 2.0.1 — 2026-09-26
+
+- Ressources CSS et JavaScript renommées pour éviter la réutilisation des anciens fichiers mis en cache par la version précédente du site.
+- Indicateur de connexion initialisé d’après l’état réel du navigateur et courbes de profondeur triées par profondeur.
+
 ## 2.0.0 — 2026-09-26
 
 - Refonte complète du simulateur en quatre espaces : simulation, pyrogramme, interprétation et analyse de données.
